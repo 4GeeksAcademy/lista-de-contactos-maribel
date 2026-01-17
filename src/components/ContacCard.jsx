@@ -1,10 +1,10 @@
-import { Component, createContext, useContext } from "react"
+import { useContext } from "react"
 import { Link } from "react-router-dom"
 import { StoreContext } from "../hooks/useGlobalReducer"
 
 
 export const ContactCard = ({contact})=> {
-    const { actions} = useContext(StoreContext)
+    const { dispatch } = useContext(StoreContext)
 
     return (
 
@@ -22,7 +22,7 @@ export const ContactCard = ({contact})=> {
 
 			<button
 				className="btn btn-danger btn-sm"
-				onClick={() => actions.deleteContact(contact.id)}
+				onClick={() => deleteContact(dispatch, contact.id)}
 			>
 				Delete
 			</button>

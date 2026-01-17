@@ -1,32 +1,67 @@
+
+const url = "https://playground.4geeks.com/contact"
+
+
+
 export const initialStore=()=>{
   return{
-    message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
+    contacts: []
   }
 }
 
-export default function storeReducer(store, action = {}) {
+export default function storeReducer(state, action = {}) {
   switch(action.type){
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+    case "SET_CONTACTS":
       return {
-        ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        ...state,
+        contacts: action.payload
       };
     default:
-      throw Error('Unknown action.');
+      return state
   }    
 }
+
+export const loadContacts = async (dispatch) => {
+  const response = await fetch ()
+  const data = await response.json()
+
+  dispatch({
+    tipe: "SET_CONTACT",
+    payload: data.contacts || []
+  })
+}
+export const addContact = async (dispatch, contact) => {
+	await fetch(`${BASE_URL}/agendas/${AGENDA}/contacts`, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(contact)
+	});
+
+	loadContacts(dispatch); // sincroniza el store
+};
+
+/*
+  🔹 PUT
+  Actualiza un contacto existente
+*/
+export const updateContact = async (dispatch, id, contact) => {
+	await fetch(`${BASE_URL}/contacts/${id}`, {
+		method: "PUT",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(contact)
+	});
+
+	loadContacts(dispatch);
+};
+
+/*
+  🔹 DELETE
+  Elimina un contacto
+*/
+export const deleteContact = async (dispatch, id) => {
+	await fetch(`${BASE_URL}/contacts/${id}`, {
+		method: "DELETE"
+	});
+
+	loadContacts(dispatch);
+};

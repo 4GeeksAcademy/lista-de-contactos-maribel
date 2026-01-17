@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useContext, useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { StoreContext } from "./hooks/useGlobalReducer"
 
 export const Profile = () => {
     const {id} = useParams()
+
+    const navigate = useNavigate()
+
+    const {store, dispatch } = useContext(StoreContext)
 
     const [form, setForm] = useState ({
         name: " ",
@@ -11,19 +16,23 @@ export const Profile = () => {
         address: " "
     })
 
-
     useEffect(() => { 
         if (id) { 
-        const contact = form.find((e)=> e.id === parseInt(id))
+        const contact = store.contacts.find((e)=> e.id === parseInt(id))
         if (contact) setForm(contact)
         }
-    }, [id, setForm])
+    }, [id, store.contacts])
 
     const handleChange = e =>
         setForm({...form, [e.target.name]: e.target.value})
 
     const  handleSubmit = e => { e.preventDefault()
-        
+        if(id) {
+            updateContact (dispatch, id, form)
+        } else {
+            addContact(dispatch, form)
+        }
+        navigate("/")
     }
     return (
 
@@ -35,10 +44,6 @@ export const Profile = () => {
 
 				<button className="btn btn-primary">Save</button>
 			</form>
-
-
-    
-
     )
 }
 
