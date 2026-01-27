@@ -17,10 +17,13 @@ export const router = createBrowserRouter(
     // Note: keep in mind that errorElement will be the default page when you don't get a route, customize that page to make your project more attractive.
     // Note: The child paths of the Layout element replace the Outlet component with the elements contained in the "element" attribute of these child paths.
 
+
+
       // Root Route: All navigation will start from here.
       <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
         <Route path="/" element={<ContactsPage/>} />
         <Route path="/add" element={<CreateContactPage/>}/>
+        <Route path="/add/:id" element={<CreateContactPage/>}/>
       </Route>
     )
 );

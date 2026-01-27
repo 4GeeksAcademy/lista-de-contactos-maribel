@@ -1,6 +1,7 @@
 
-const url = "https://playground.4geeks.com/contact"
+const BASE_URL = "https://playground.4geeks.com/contact"
 
+const AGENDA = "agenda_maribel"
 
 
 export const initialStore=()=>{
@@ -22,14 +23,15 @@ export default function storeReducer(state, action = {}) {
 }
 
 export const loadContacts = async (dispatch) => {
-  const response = await fetch ()
+  const response = await fetch (`${BASE_URL}/agendas/${AGENDA}/contacts`)
   const data = await response.json()
 
   dispatch({
-    tipe: "SET_CONTACT",
+    type: "SET_CONTACTS",
     payload: data.contacts || []
   })
 }
+
 export const addContact = async (dispatch, contact) => {
 	await fetch(`${BASE_URL}/agendas/${AGENDA}/contacts`, {
 		method: "POST",
@@ -45,7 +47,7 @@ export const addContact = async (dispatch, contact) => {
   Actualiza un contacto existente
 */
 export const updateContact = async (dispatch, id, contact) => {
-	await fetch(`${BASE_URL}/contacts/${id}`, {
+	await fetch(`${BASE_URL}/agendas/${AGENDA}/contacts/${id}`, {
 		method: "PUT",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(contact)
@@ -59,9 +61,19 @@ export const updateContact = async (dispatch, id, contact) => {
   Elimina un contacto
 */
 export const deleteContact = async (dispatch, id) => {
-	await fetch(`${BASE_URL}/contacts/${id}`, {
+	await fetch(`${BASE_URL}/agendas/${AGENDA}/contacts/${id}`, {
 		method: "DELETE"
 	});
 
 	loadContacts(dispatch);
 };
+
+// Crea una agenda ()
+export const createAgenda = async () => {
+  await fetch(`${BASE_URL}/agendas/${AGENDA}`,
+    {
+      method: "POST"
+
+    }
+  )
+}
